@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <title>Advanced Malware Scanner</title>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    /* Navbar */
+    .navbar {
+      background-color: #343a40;
+    }
+    
+    .navbar-brand {
+      font-weight: bold;
+      color: #ff9800 !important;
+    }
+    
+    .nav-link:hover {
+      color: #ff9800 !important;
+    }
+    
+    /* Section Styles */
+    section {
+      padding: 60px 20px;
+    }
+    
+    #hero {
+      background-image: url("{{ url_for('static', filename='images/index.webp') }}");
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+    }
+    
+    #hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    #hero h2 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    
+    #hero .btn {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 1.1rem;
+    }
+    
+    /* Added divider after sections for better separation */
+    section + section {
+      border-top: 2px solid #e3e3e3;
+    }
+    
+    /* About, Features, FAQ background */
+    #about, #features, #faq {
+      background-color: #f8f9fa;
+    }
+    
+    /* Scan Section */
+    #scan {
+      background-color: #e3f2fd;
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+    
+    /* Add subtle animations when scrolling into view */
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    
+    section {
+      animation: fadeIn 1s ease-out;
+    }
+    
+    /* FAQ Accordion */
+    .accordion-button {
+      background-color: #fff;
+      color: #212529;
+      border-radius: 0;
+    }
+    
+    .accordion-button:hover {
+      background-color: #ff9800;
+      color: white;
+    }
+    
+    /* Contact Form */
+    #contact {
+      background-color: #343a40;
+      text-align: center;
+      color: white;
+      border-top: 2px solid #ff9800;
+    }
+    
+    footer {
+      background-color: #212529;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+    }
+    
+    /* Add spacing before and after footer */
+    footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    
+    section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+    }
+    
+    section p {
+      font-size: 1.1rem;
+      color: #6c757d;
+      margin-bottom: 30px;
+    }
+    
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Malware Scanner &amp; Security Solutions</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link" href="#testimonials">Feedback</a></li>
+          <li class="nav-item"><a class="nav-link" href="/contact" >Contact Us</a></li>
+        </ul>
+        <a href="/login" class="btn btn-outline-light ms-3">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <h1>Advanced Malware Scanner & Security Solutions</h1>
+    <p>Protecting your digital world with powerful cybersecurity tools.</p>
+    <a href="/contact" class="btn btn-warning">Contact Us</a>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="container">
+    <h2 class="text-center mb-4">About Us</h2>
+    <p class="text-center">We specialize in advanced malware detection and cybersecurity solutions. Meet our team!</p>
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <div class="card team-card">
+          <img src="static/images/madhubb.jpg" class="card-img-top" alt="Madhu Balakrishnan Bashyam">
+          <div class="card-body text-center">
+            <h5 class="card-title">Madhu Balakrishnan Bashyam</h5>
+            <p>Cybersecurity Specialist</p>
+            <a href="https://www.linkedin.com/in/themadhubb/" class="btn btn-outline-primary">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card team-card">
+          <img src="static/images/sreepriya.jpg" class="card-img-top" alt="Madhu Balakrishnan Bashyam">
+          <div class="card-body text-center">
+            <h5 class="card-title">Sree Priya</h5>
+            <p>Malware Analyst</p>
+            <a href="#" class="btn btn-outline-primary">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="container">
+    <h2 class="text-center mb-4">Features</h2>
+    <h2 class="text-center mb-4">To Use The Features Please Login First</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card feature-card p-4">
+          <i class="bi bi-shield-check"></i>
+          <h5>Real-Time Scanning</h5>
+          <p>Scan files and URLs for malware threats instantly.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card feature-card p-4">
+          <i class="bi bi-file-earmark-text"></i>
+          <h5>Detailed Reports</h5>
+          <p>Get comprehensive insights and security recommendations.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card feature-card p-4">
+          <i class="bi bi-key"></i>
+          <h5>Strong Password Generator</h5>
+          <p>Create highly secure and unique passwords effortlessly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+   <!-- FAQ Section -->
+<section id="faq" style="background-color: #f8f9fa; padding: 50px 20px;">
+  <div class="container">
+    <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+    <p class="text-center">Find answers to common questions about our platform and its features.</p>
+    <div class="accordion" id="faqAccordion">
+      
+      <!-- Question 1 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            How does file scanning work?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Our file scanning feature uses advanced algorithms and signature-based detection methods to identify potential malware or suspicious activity in uploaded files. Simply upload a file, and our system will provide a detailed analysis within seconds.
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Can I scan a URL for malicious content?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes, our URL scanning feature analyzes websites for phishing attempts, malware, or other harmful content. Paste the URL into the scanning tool, and we’ll assess its safety.
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            What is IP vulnerability checking?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            IP vulnerability checking scans your network or device for open ports and potential weaknesses that hackers might exploit. It’s a crucial step in identifying and fixing security loopholes.
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            How secure is the strong password generator?
+          </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Our strong password generator uses industry-best practices to create unique, highly secure passwords that are difficult to crack. We ensure no passwords are stored or logged, keeping your information private.
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFive">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            What file formats are supported for scanning?
+          </button>
+        </h2>
+        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            We support a wide range of file formats, including .exe, .pdf, .docx, .zip, and many others. Check our detailed guidelines for a complete list of supported file types.
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 6 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSix">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+            How do I interpret scan results?
+          </button>
+        </h2>
+        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Each scan generates a detailed report with categorized threats. If no threats are found, the result will indicate a clean status. In case of threats detected don't process them further.
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 7 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSeven">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+            Is your platform GDPR-compliant?
+          </button>
+        </h2>
+        <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Yes, we prioritize user privacy and are fully compliant with GDPR regulations. Your uploaded files, URLs, or IP data are securely handled and deleted after processing.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials">
+  <h2 class="text-center mb-4">What Our Users Say</h2>
+  <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active text-center">
+        <p>"This tool saved my system from multiple threats!"</p>
+        <h5>- Madhu Balakrishnan Bashyam</h5>
+      </div>
+      <div class="carousel-item text-center">
+        <p>"The most reliable scanner I've ever used."</p>
+        <h5>- Sree Priya</h5>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Quick Contact Us</h2>
+    <p>Need help? We're here for you!</p>
+    <form action="/contactus" method="POST">
+      <div class="container">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <br>
+      <div class="container">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <br>
+      <div class="container">
+          <label for="details" class="form-label">Put Here Short Details</label>
+          <textarea class="form-control" id="details" name="details" rows="3" required></textarea>
+      </div>
+  
+      <br><button type="submit" class="btn btn-primary">Send Message</button>
+  </form>
+  </section>
+
+   <!-- Contact Us Modal -->
+   <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactModalLabel">Contact Us</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="#" method="POST">
+            <div class="mb-3">
+              <label for="name" class="form-label">Your Name</label>
+              <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Your Email</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Message</label>
+              <textarea class="form-control" id="message" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>&copy; 2023 Malware Scanner | All Rights Reserved</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

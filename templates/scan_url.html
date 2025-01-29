@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerability Scanner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* Container holding everything */
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        /* File Upload Styling */
+        .file-upload {
+            margin-bottom: 40px;
+            position: relative;
+            border: 2px dashed #ff4081;
+            border-radius: 12px;
+            padding: 40px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            background-color: #f9f9f9;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload label {
+            display: block;
+            background: #ff4081;
+            color: white;
+            padding: 18px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .file-upload label:hover {
+            background: #f50057;
+        }
+
+        .file-info {
+            font-size: 1rem;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        /* Submit Button Styling */
+        .submit-btn {
+            background: #3f51b5;
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #303f9f;
+        }
+
+        /* Scan History Button */
+        .history-btn {
+            background: #ff4081;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .history-btn:hover {
+            background: #f50057;
+        }
+
+        /* Enhanced Loading Spinner */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-container {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .loading-spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #ff4081;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Progress Bar Styling */
+        .progress-bar {
+            margin-top: 20px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 12px;
+            display: none;
+        }
+
+        .progress-bar div {
+            height: 100%;
+            background: #4CAF50;
+            width: 0;
+            transition: width 1s ease;
+        }
+
+        /* Scan result section */
+        .scan-result {
+            margin-top: 40px;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .scan-result h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .scan-result p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Logout Button Styling */
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff4081;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #f50057;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p.subtitle {
+                font-size: 1rem;
+            }
+
+            .submit-btn {
+                font-size: 1.1rem;
+                padding: 14px;
+            }
+
+            .file-upload label {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Logout Button -->
+        <button class="logout-btn" onclick="window.location.href='/logout'">Logout</button>
+        <h1>URL Vulnerability Scanner</h1>
+        <p class="subtitle">Enter URL for scanning.</p>
+
+        <form method="POST" action="{{ url_for('scan_url') }}">
+            <label for="url">Enter URL:</label>
+            <input type="text" name="url" id="url" required>
+            <button type="submit">Scan</button>
+        </form>
+
+        <!-- Scan History Button -->
+        <button class="history-btn" onclick="window.location.href='/scan_history'">View Scan History</button>
+        <button class="history-btn" onclick="window.location.href='/'">Return To Home Page</button>
+
+        <!-- Loading Overlay (initially hidden) -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Scanning in progress...</p>
+            </div>
+        </div>
+
+        {% if scan_status %}
+        <div class="scan-result">
+            <h2>Scan Result:</h2>
+            <p>File Type: <strong>{{ file_type }}</strong></p>
+            <p>Scan Status: <strong>{{ scan_status }}</strong></p>
+            <pre>{{ scan_results }}</pre>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+
+        // Show loading spinner on submit
+        const form = document.getElementById('scanForm');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+
+        form.onsubmit = function () {
+            loadingOverlay.style.display = 'flex';
+            progressBar.style.display = 'block';
+        };
+    </script>
+</body>
+
+</html>

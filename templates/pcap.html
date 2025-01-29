@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PCAP File Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-4 text-center">PCAP File Analyzer</h1>
+            
+            <form id="pcapUploadForm" class="space-y-4">
+                <div class="flex items-center justify-center w-full">
+                    <label class="w-full flex flex-col items-center px-4 py-6 bg-white text-blue-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue-500 cursor-pointer hover:bg-blue-500 hover:text-white">
+                        <svg class="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1z" />
+                        </svg>
+                        <span class="mt-2 text-base leading-normal">Select a PCAP file</span>
+                        <input type='file' class="hidden" accept=".pcap,.pcapng" id="pcapFileInput" name="pcap_file" />
+                    </label>
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300">
+                    Analyze PCAP
+                </button>
+                <button class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300" onclick="returnToHome()">
+                    <i class=""></i> Return To Home Page
+                </button>
+            </form>
+
+            <div id="loadingSpinner" class="hidden text-center py-4">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 rounded-full"></div>
+                <p class="mt-2 text-gray-600">Analyzing PCAP file...</p>
+            </div>
+
+            <div id="errorMessage" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <!-- Error messages will be dynamically populated here -->
+            </div>
+
+            <div id="analysisResults" class="hidden mt-4">
+                <!-- Results will be dynamically populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('pcapUploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('pcapFileInput');
+            const file = fileInput.files[0];
+            
+            // Reset previous states
+            document.getElementById('errorMessage').classList.add('hidden');
+            document.getElementById('analysisResults').classList.add('hidden');
+            
+            if (!file) {
+                showError('Please select a PCAP file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('pcap_file', file);
+
+            // Show loading spinner
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+
+            fetch('/analyze_pcap', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                
+                if (data.status === 'success') {
+                    displayResults(data.analysis);
+                } else {
+                    showError(data.error || 'An unknown error occurred');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                showError('Network error or server connection issue');
+            });
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function displayResults(analysis) {
+            const resultsDiv = document.getElementById('analysisResults');
+            resultsDiv.classList.remove('hidden');
+            
+            // Populate results dynamically
+            resultsDiv.innerHTML = `
+                <div class="bg-white shadow rounded-lg p-4">
+                    <h2 class="text-xl font-semibold mb-4">Analysis Results</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="font-medium">Total Packets</h3>
+                            <p>${analysis.total_packets}</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-medium">Protocols</h3>
+                            <ul>
+                                ${Object.entries(analysis.protocols).map(([proto, count]) => 
+                                    `<li>${proto}: ${count}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h3 class="font-medium">Top Source IPs</h3>
+                        <table class="w-full border">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border p-2">IP</th>
+                                    <th class="border p-2">Source Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${analysis.top_src_ips.map(([ip, stats]) => 
+                                    `<tr>
+                                        <td class="border p-2">${ip}</td>
+                                        <td class="border p-2">${stats.src_count}</td>
+                                    </tr>`
+                                ).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+        function returnToHome() {
+            const userConfirmed = confirm("Are you sure you want to return to the Home Page?");
+            if (userConfirmed) {
+                window.location.href = "/"; // Navigate to the home page
+            } else {
+                console.log("User canceled the return to home.");
+            }
+        }
+    </script>
+</body>
+</html>

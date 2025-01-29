@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trend Analysis</title>
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Add some basic styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">CVSS Score Trend Analysis</h1>
+        <p class="text-center">View the trends of CVSS scores for your scans over time.</p>
+        
+        <!-- Chart Container -->
+        <div id="trend-chart" style="width:100%;height:500px;"></div>
+
+        <!-- Back Button -->
+        <div class="text-center mt-4">
+            <a href="/index" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Plotly Script -->
+    <script>
+        // Data passed from the server-side
+        var timestamps = {{ timestamps | safe }};
+        var scores = {{ scores | safe }};
+        
+        // Define the chart data
+        var data = [{
+            x: timestamps,
+            y: scores,
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: 'blue', width: 2 },
+            marker: { color: 'red', size: 8 },
+            name: 'CVSS Score'
+        }];
+
+        // Define the chart layout
+        var layout = {
+            title: 'CVSS Score Trend',
+            xaxis: {
+                title: 'Timestamp',
+                showgrid: true,
+                zeroline: false
+            },
+            yaxis: {
+                title: 'CVSS Score',
+                showline: true,
+                range: [0, 10]  // CVSS scores range from 0 to 10
+            },
+            margin: {
+                l: 50,
+                r: 50,
+                t: 50,
+                b: 50
+            }
+        };
+
+        // Render the chart
+        Plotly.newPlot('trend-chart', data, layout);
+    </script>
+</body>
+</html>

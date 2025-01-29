@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Steganography Toolbox</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f4f7f6;
+            --card-color: #ffffff;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: var(--card-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .section {
+            display: none;
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .input-group input[type="file"],
+        .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-download {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-download:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .preview {
+            width: 48%;
+            text-align: center;
+        }
+
+        .preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f4f8;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 5px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕵️ Steganography Toolbox</h1>
+            <p>Hide & Reveal Secret Messages in Images</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-section="encode">Encode</div>
+            <div class="tab" data-section="decode">Decode</div>
+        </div>
+
+        <div id="encode" class="section active">
+            <h2>Hide Your Secret Message 🔐</h2>
+            <div class="input-group">
+                <label>Select Cover Image</label>
+                <input type="file" id="encodeImage" accept="image/*">
+            </div>
+
+            <div class="input-group">
+                <label>Secret Message</label>
+                <textarea id="secretMessage" rows="4" placeholder="Type your secret message here..."></textarea>
+                <div class="progress-container">
+                    <div class="progress-bar" id="messageProgress"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn" onclick="encodeMessage()">
+                    <i class="fas fa-lock"></i> Hide Message
+                </button>
+                <button class="btn" onclick="returnToHome()">
+                    <i class=""></i> Return To Home Page
+                </button>
+                <button id="downloadBtn" class="btn btn-download btn-disabled" disabled>
+                    <i class="fas fa-download"></i> Download Encoded Image
+                </button>
+            </div>
+
+            <div class="preview-container">
+                <div class="preview">
+                    <h3>Original Image</h3>
+                    <img id="originalPreview" src="" style="display:none;">
+                </div>
+                <div class="preview">
+                    <h3>Modified Image</h3>
+                    <img id="modifiedPreview" src="" style="display:none;">
+                </div>
+            </div>
+        </div>
+
+        <div id="decode" class="section">
+            <h2>Reveal Hidden Messages 🔓</h2>
+            <div class="input-group">
+                <label>Select Steganographic Image</label>
+                <input type="file" id="decodeImage" accept="image/*">
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn" onclick="decodeMessage()">
+                    <i class="fas fa-unlock"></i> Reveal Message
+                </button>
+                <button class="btn" onclick="returnToHome()">
+                    <i class=""></i> Return To Home Page
+                </button>
+            </div>
+
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        let encodedImageBlob = null;
+
+        function encodeMessage() {
+            const imageFile = document.getElementById('encodeImage').files[0];
+            const secretMessage = document.getElementById('secretMessage').value;
+            const originalPreview = document.getElementById('originalPreview');
+            const modifiedPreview = document.getElementById('modifiedPreview');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            if (!imageFile || !secretMessage) {
+                alert('Please select an image and enter a message');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            formData.append('message', secretMessage);
+            
+            fetch('/encode', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Encoding failed');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Store the blob for download
+                encodedImageBlob = blob;
+                
+                // Create object URL for preview
+                const url = URL.createObjectURL(blob);
+                
+                // Set original image preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalPreview.src = e.target.result;
+                    originalPreview.style.display = 'block';
+                }
+                reader.readAsDataURL(imageFile);
+                
+                // Set modified image preview
+                modifiedPreview.src = url;
+                modifiedPreview.style.display = 'block';
+                
+                // Enable download button
+                downloadBtn.disabled = false;
+                downloadBtn.classList.remove('btn-disabled');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to encode image');
+            });
+        }
+
+        // Function to return to the home page with confirmation
+        function returnToHome() {
+            const userConfirmed = confirm("Are you sure you want to return to the Home Page?");
+            if (userConfirmed) {
+                window.location.href = "/"; // Navigate to the home page
+            } else {
+                console.log("User canceled the return to home.");
+            }
+        }
+
+        function downloadEncodedImage() {
+            if (!encodedImageBlob) {
+                alert('No encoded image available');
+                return;
+            }
+            
+            // Create a link and trigger download
+            const url = URL.createObjectURL(encodedImageBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'encoded_image.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function decodeMessage() {
+            const imageFile = document.getElementById('decodeImage').files[0];
+            const resultDiv = document.getElementById('result');
+            
+            if (!imageFile) {
+                alert('Please select an image');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            
+            fetch('/decode', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    resultDiv.innerHTML = `
+                        <h3>🔓 Decoded Message</h3>
+                        <p>${data.message}</p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = '<p>No message found</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = '<p>Failed to decode message</p>';
+            });
+        }
+
+        // Add event listener for download button
+        document.getElementById('downloadBtn').addEventListener('click', downloadEncodedImage);
+
+        // Tab switching logic
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab, .section').forEach(el => {
+                    el.classList.remove('active');
+                });
+
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.section).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

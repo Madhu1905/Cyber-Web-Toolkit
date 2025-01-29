@@ -1,0 +1,96 @@
+/* General styles for the body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f1ebeb;
+}
+
+/* Headings styles */
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    color: #333;
+}
+
+/* Unordered list styles */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* List item styles */
+li {
+    margin: 5px 0;
+}
+
+/* Container for forms */
+.forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows the forms to wrap if needed */
+    gap: 20px; /* Space between forms */
+    padding: 20px; /* Padding around the container */
+}
+
+/* Styles for the registration form */
+div#registrationForm {
+    width: 300px;
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Styles for the login form */
+div#loginForm {
+    width: 300px;
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Common styles for all forms */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+input[type="text"], 
+input[type="password"], 
+select {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Button styles */
+button {
+    padding: 10px;
+    background-color: #04dffc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #004bb3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

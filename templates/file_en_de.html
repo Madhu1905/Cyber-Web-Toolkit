@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Encryption & Decryption</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 900px;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    textarea,
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .output {
+      margin-top: 10px;
+    }
+
+    #encrypt-file-download, #decrypt-file-download {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>File Encryption & Decryption</h1>
+
+    <!-- Encryption Section -->
+    <div class="section">
+      <h2>Encrypt a File</h2>
+      <button id="generate-encryption-key">Generate Encryption Key</button>
+      <textarea id="encryption-key" placeholder="Encryption key will appear here..." readonly></textarea>
+      <label for="encrypt-file">Select File to Encrypt:</label>
+      <input type="file" id="encrypt-file">
+      <button id="encrypt-btn">Encrypt File</button>
+      <div id="encrypt-result" class="output"></div>
+      <button id="encrypt-file-download">Download Encrypted File</button>
+    </div>
+
+    <!-- Decryption Section -->
+    <div class="section">
+      <h2>Decrypt a File</h2>
+      <textarea id="decryption-key" placeholder="Enter your decryption key here..."></textarea>
+      <label for="decrypt-file">Select File to Decrypt:</label>
+      <input type="file" id="decrypt-file">
+      <button id="decrypt-btn">Decrypt File</button>
+      <div id="decrypt-result" class="output"></div>
+      <button id="decrypt-file-download">Download Decrypted File</button>
+    </div>
+    <div class="action-buttons">
+      <button class="btn" href="/" onclick="returnToHome()">
+          <i class=""></i> Return To Home Page
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Generate a random encryption key
+    function generateKey() {
+      const key = window.crypto.getRandomValues(new Uint8Array(32)); // 256-bit key
+      return Array.from(key).map(b => b.toString(16).padStart(2, "0")).join(""); // Convert to hex string
+    }
+
+    // Convert hex string to ArrayBuffer
+    function hexToArrayBuffer(hex) {
+      const array = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < hex.length; i += 2) {
+        array[i / 2] = parseInt(hex.substr(i, 2), 16);
+      }
+      return array.buffer;
+    }
+
+    // Convert ArrayBuffer to Base64
+    function arrayBufferToBase64(buffer) {
+      return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+    }
+
+    // Convert Base64 to ArrayBuffer
+    function base64ToArrayBuffer(base64) {
+      return Uint8Array.from(atob(base64), c => c.charCodeAt(0)).buffer;
+    }
+
+    // Encryption function
+    async function encryptFile(key, file) {
+      console.log("Starting encryption...");
+      const iv = crypto.getRandomValues(new Uint8Array(12)); // 96-bit IV
+      console.log("Generated IV: ", iv);
+
+      try {
+        // Ensure the key is correctly formatted as ArrayBuffer
+        const keyBuffer = hexToArrayBuffer(key); // Convert hex key to ArrayBuffer
+        console.log("Imported Key Buffer: ", keyBuffer);
+        
+        const importedKey = await crypto.subtle.importKey(
+          "raw",
+          keyBuffer, // Use ArrayBuffer here
+          { name: "AES-GCM" },
+          false,
+          ["encrypt"]
+        );
+        
+        const fileBuffer = await file.arrayBuffer();
+        console.log("File Buffer Length: ", fileBuffer.byteLength);
+        
+        const encryptedData = await crypto.subtle.encrypt(
+          { name: "AES-GCM", iv },
+          importedKey,
+          fileBuffer
+        );
+        console.log("Encryption successful");
+
+        return { encryptedData: new Uint8Array(encryptedData), iv };
+      } catch (err) {
+        console.error("Encryption failed: ", err);
+        throw err;
+      }
+    }
+
+    // Decryption function
+    async function decryptFile(key, iv, file) {
+      console.log("Starting decryption...");
+      try {
+        const keyBuffer = hexToArrayBuffer(key); // Convert hex key to ArrayBuffer
+        console.log("Imported Key Buffer: ", keyBuffer);
+        
+        const importedKey = await crypto.subtle.importKey(
+          "raw",
+          keyBuffer, // Use ArrayBuffer here
+          { name: "AES-GCM" },
+          false,
+          ["decrypt"]
+        );
+        
+        const fileBuffer = await file.arrayBuffer();
+        console.log("File Buffer Length: ", fileBuffer.byteLength);
+
+        // Decrypt the file data
+        const decryptedData = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv }, // AES-GCM requires both key and IV
+          importedKey,
+          fileBuffer
+        );
+        console.log("Decryption successful");
+        
+        return new Uint8Array(decryptedData);
+      } catch (err) {
+        console.error("Decryption failed: ", err);
+        throw err; // Throw error for further handling
+      }
+    }
+
+    const encryptionKeyTextarea = document.getElementById("encryption-key");
+    const generateEncryptionKeyBtn = document.getElementById("generate-encryption-key");
+    const encryptFileInput = document.getElementById("encrypt-file");
+    const encryptBtn = document.getElementById("encrypt-btn");
+    const encryptResultDiv = document.getElementById("encrypt-result");
+    const encryptFileDownloadBtn = document.getElementById("encrypt-file-download");
+
+    const decryptionKeyTextarea = document.getElementById("decryption-key");
+    const decryptFileInput = document.getElementById("decrypt-file");
+    const decryptBtn = document.getElementById("decrypt-btn");
+    const decryptResultDiv = document.getElementById("decrypt-result");
+    const decryptFileDownloadBtn = document.getElementById("decrypt-file-download");
+
+    let encryptedFileData = null;
+    let decryptedFileData = null;
+
+    // Generate encryption key
+    generateEncryptionKeyBtn.addEventListener("click", () => {
+      const randomKey = generateKey();
+      encryptionKeyTextarea.value = randomKey;
+      console.log("Generated key: ", randomKey);
+    });
+
+    // Encrypt file
+    encryptBtn.addEventListener("click", async () => {
+      const file = encryptFileInput.files[0];
+      const key = encryptionKeyTextarea.value;
+      if (!file || !key) {
+        encryptResultDiv.textContent = "Please select a file and generate a key.";
+        return;
+      }
+
+      encryptResultDiv.textContent = "Encrypting file...";
+      try {
+        const { encryptedData, iv } = await encryptFile(key, file);
+        encryptedFileData = new Blob([iv, encryptedData]); // Save the encrypted file data
+        const url = URL.createObjectURL(encryptedFileData);
+        encryptFileDownloadBtn.style.display = "block"; // Show the download button
+        encryptFileDownloadBtn.onclick = () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `encrypted_${file.name}`;
+          a.click();
+        };
+        encryptResultDiv.textContent = "File encrypted successfully.";
+      } catch (err) {
+        encryptResultDiv.textContent = "Encryption failed. Please check the console for details.";
+      }
+    });
+
+    // Decrypt file
+    decryptBtn.addEventListener("click", async () => {
+      const file = decryptFileInput.files[0];
+      const key = decryptionKeyTextarea.value;
+      if (!file || !key) {
+        decryptResultDiv.textContent = "Please select a file and enter the decryption key.";
+        return;
+      }
+
+      decryptResultDiv.textContent = "Decrypting file...";
+      try {
+        const iv = new Uint8Array(await file.slice(0, 12).arrayBuffer()); // Extract IV (first 12 bytes)
+        const decryptedData = await decryptFile(key, iv, file.slice(12)); // Decrypt excluding IV
+        decryptedFileData = new Blob([decryptedData]);
+        const url = URL.createObjectURL(decryptedFileData);
+        decryptFileDownloadBtn.style.display = "block"; // Show the download button
+        decryptFileDownloadBtn.onclick = () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `decrypted_${file.name}`;
+          a.click();
+        };
+        decryptResultDiv.textContent = "File decrypted successfully.";
+      } catch (err) {
+        decryptResultDiv.textContent = "Decryption failed. Please check the console for details.";
+        console.error("Decryption error:", err);
+      }
+    });
+
+    function returnToHome() {
+      const userConfirmed = confirm("Are you sure you want to return to the Home Page?");
+      if (userConfirmed) {
+          window.location.href = "/"; // Navigate to the home page
+      } else {
+          console.log("User canceled the return to home.");
+      }
+  }
+  </script>
+</body>
+</html>

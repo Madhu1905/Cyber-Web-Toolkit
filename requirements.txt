@@ -1,0 +1,58 @@
+bcrypt
+blinker
+clamav
+click
+colorama
+Flask
+Flask-Cors
+Flask-Mail
+Flask-SQLAlchemy  # If using SQLAlchemy
+Flask-Talisman
+importlib-metadata  # For Python versions < 3.8
+itsdangerous
+Jinja2
+MarkupSafe
+numpy
+packaging        # Dependency for several packages
+pandas    
+paramiko 
+Pillow
+python-dateutil  # Dependency for pandas
+python-nmap
+requests
+six              # Used by several other libraries
+SQLAlchemy       
+typing-extensions # For type hinting compatibility
+Werkzeug
+zipp            # Dependency for importlib_metadata
+
+
+
+requirment.txt:
+bcrypt
+blinker
+clamav
+click
+colorama
+Flask
+Flask-Cors
+Flask-Mail
+Flask-SQLAlchemy  # If using SQLAlchemy
+Flask-Talisman
+importlib-metadata  # For Python versions < 3.8
+itsdangerous
+Jinja2
+MarkupSafe
+numpy
+packaging        # Dependency for several packages
+pandas    
+paramiko 
+Pillow
+python-dateutil  # Dependency for pandas
+python-nmap
+requests
+six              # Used by several other libraries
+SQLAlchemy       
+typing-extensions # For type hinting compatibility
+Werkzeug
+zipp            # Dependency for importlib_metadata

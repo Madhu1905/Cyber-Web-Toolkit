@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        /* General styles for the body and headings */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f1ebeb;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    color: #333;
+}
+
+/* style.css */
+
+/* Existing styles remain unchanged */
+
+/* New styles for the container */
+.forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows the forms to wrap to the next line if necessary */
+    gap: 20px; /* Adds space between the forms */
+    padding: 20px; /* Adds some padding around the container */
+}
+
+/* Adjustments to the forms to ensure they look good side by side */
+div#registrationForm  {
+    width: 300px;
+    margin: 0; /* Removed auto margin to allow Flexbox to control spacing */
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+div#loginForm {
+    width: 300px;
+    margin: 0; /* Removed auto margin to allow Flexbox to control spacing */
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);   
+}
+
+/* Common styles for both forms */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="password"], select {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    background-color: #04dffc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004bb3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+    </style>
+</head>
+<body>
+    <h1>User Registration</h1>
+    <div class="forms-container">
+        <div id="registrationForm">
+            <h2>Register</h2>
+            {% if error %}
+            <p style="color: red;">{{ error }}</p>
+            {% endif %}
+            {% if success %}
+            <p style="color: green;">{{ success }}</p>
+            {% endif %}
+            <form action="/register" method="POST">
+                <label for="registerUsername">Username:</label>
+                <input type="text" id="registerUsername" name="username" required>
+                <br>
+                <label for="registeremail">Email:</label>
+                <input type="text" id="registeremail" name="email" required>
+                <br>
+                <label for="registerPassword">Password:</label>
+                <input type="password" id="registerPassword" name="password" required>
+                <br>
+                <button type="submit">Register</button>
+                <h4>Already have an account? <a href="/login">Login</a></h4>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

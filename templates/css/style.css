@@ -1,0 +1,186 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	font-family: 'Open Sans', sans-serif;
+
+}
+
+.carousel-item img{
+	width: 100%;
+	height: 93vh;
+
+
+}
+
+
+.horizontal-card-img img{
+	width: 100%;
+	height: 35vh;
+
+
+
+}
+
+/* Navbar gradient */
+.bg-gradient-info {
+  background: linear-gradient(45deg, #17a2b8, #0099cc);
+}
+
+/* Modern Card Shadow */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Carousel text */
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Button hover effect */
+.btn-outline-light:hover {
+  background: #17a2b8;
+  color: white;
+  transition: 0.3s;
+}
+
+/* Footer links */
+footer .social-links i {
+  font-size: 1.5rem;
+  transition: color 0.3s;
+}
+
+footer .social-links i:hover {
+  color: #17a2b8;
+}
+
+
+.about_img{
+	min-width: 100%;
+	max-height: 280px;
+
+}
+
+.my-service img{
+	width: 100%;
+	height: 100%;
+}
+
+.chekcout-my-profile{
+	background: #a6dcef;
+}
+
+footer p{
+	margin-bottom: 0;
+}
+
+
+/*.my-service .row>*{
+	padding-right: 0;
+    padding-left: 0;
+}*/
+
+/*for responsive design*/
+/*// X-Small devices (portrait phones, less than 576px)*/
+/*// No media query for `xs` since this is the default in Bootstrap*/
+
+/*// Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) { ... }
+
+/*// Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) { ... }
+
+/*// Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) { ... }
+
+/*// X-Large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) { ... }
+
+/*// XX-Large devices (larger desktops, 1400px and up)*/
+@media (min-width: 1400px) { ... }
+
+
+
+
+/* General styles for the body and headings */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f1ebeb;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    color: #333;
+}
+
+/* style.css */
+
+/* Existing styles remain unchanged */
+
+/* New styles for the container */
+.forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows the forms to wrap to the next line if necessary */
+    gap: 20px; /* Adds space between the forms */
+    padding: 20px; /* Adds some padding around the container */
+}
+
+/* Adjustments to the forms to ensure they look good side by side */
+div#registrationForm  {
+    width: 300px;
+    margin: 0; /* Removed auto margin to allow Flexbox to control spacing */
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+div#loginForm {
+    width: 300px;
+    margin: 0; /* Removed auto margin to allow Flexbox to control spacing */
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);   
+}
+
+/* Common styles for both forms */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="password"], select {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    background-color: #04dffc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004bb3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

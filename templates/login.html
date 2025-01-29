@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        /* General styles for the body and headings */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f1ebeb;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    color: #333;
+}
+
+/* style.css */
+
+/* Existing styles remain unchanged */
+
+/* New styles for the container */
+.forms-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows the forms to wrap to the next line if necessary */
+    gap: 20px; /* Adds space between the forms */
+    padding: 20px; /* Adds some padding around the container */
+}
+
+/* Adjustments to the forms to ensure they look good side by side */
+div#registrationForm  {
+    width: 300px;
+    margin: 0; /* Removed auto margin to allow Flexbox to control spacing */
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+div#loginForm {
+    width: 300px;
+    margin: 0; /* Removed auto margin to allow Flexbox to control spacing */
+    padding: 60px;
+    background-color: #d2e3e2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);   
+}
+
+/* Common styles for both forms */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input[type="text"], input[type="password"], select {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    background-color: #04dffc;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004bb3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+.forgot-password {
+    text-align: right;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+.forgot-password a {
+    text-decoration: none;
+    color: #004bb3;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+<body>
+    <h1>User Login</h1>
+    <div class="forms-container">
+        <div id="loginForm">
+            <h2>Login</h2>
+            {% if error %}
+            <p style="color: red;">{{ error }}</p>
+            {% endif %}
+            {% if success %}
+            <p style="color: green;">{{ success }}</p>
+            {% endif %}
+            <form action="/login" method="POST">
+                <label for="loginUsername">Username:</label>
+                <input type="text" id="loginUsername" name="username" required>
+                <br>
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" name="password" required>
+                <br>
+                <div class="forgot-password">
+                    <a href="/request_reset">Forgot Password?</a>
+                </div>
+                <button type="submit">Login</button>
+                <h4>New User? <a href="/register">Register</a></h4>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
