@@ -19,10 +19,15 @@ A powerful web-based cybersecurity toolkit built with Flask, designed to provide
 🛠️ Tech Stack:
 
 Backend: Flask, Flask-SQLAlchemy, Flask-Mail, Flask-Cors, Flask-Talisman
+
 Security: bcrypt, itsdangerous, paramiko
+
 Networking: python-nmap
+
 Data Handling: Pandas, NumPy, SQLAlchemy
+
 Steganography & Encryption: Pillow, cryptography
+
 UI & Utilities: Jinja2, Click, Colorama, Requests
 
 
