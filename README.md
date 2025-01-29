@@ -29,14 +29,17 @@ UI & Utilities: Jinja2, Click, Colorama, Requests
 📦 Installation:
 
   1.Clone the repo:
+    
     git clone https://github.com/yourusername/cybersec-web-toolkit.git
     
     cd cybersec-web-toolkit
     
   2.Install dependencies:
+    
     pip install -r requirements.txt
 
   3.Run the application:
+    
     python3 app.py
 
 
